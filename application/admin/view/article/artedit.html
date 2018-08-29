@@ -1,0 +1,65 @@
+{layout name="public:layout" /}
+
+
+<h3 class="text-center text-success">文章编辑</h3>
+
+
+<form  action="{:url('article/doEdit')}" method="post" id="login" enctype="multipart/form-data">
+
+    <input type="hidden" value="{$article.id}"name="id">
+
+
+    <div class="form-group">
+        <label for="title" class="control-label">标题</label>
+
+        <input type="text" name="title" class="form-control" id="title" value="{$article.title}">
+
+    </div>
+
+
+    <div class="form-group">
+        <label for="title" class="control-label">分类</label>
+        <select name="cate_id" id="" class="form-control">
+            {volist name="$cateList" id="cate"}
+
+            <option value="{$cate.id}">{$cate.name}</option>
+
+            {/volist}
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+        <label for="title" class="control-label">内容</label>
+
+        <textarea type="text" style="min-height: 250px" name="content" class="form-control" value="">
+
+            <div>
+                {$article.content}
+            </div>
+
+        </textarea>
+
+    </div>
+
+
+    <img src="/uploads/{$article.title_img}" class="img-rounded" alt="" width="100px">
+    <div class="form-group">
+        <label for="title" class="control-label">图片</label>
+
+        <input type="file" name="title_img" class="form-control" id="title_img">
+
+    </div>
+
+
+
+
+
+    <div class="form-group">
+
+
+        <button type="submit" class="btn btn-primary" id="submit">保存文章</button>
+
+    </div>
+</form>

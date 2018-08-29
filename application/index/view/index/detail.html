@@ -1,0 +1,144 @@
+{extend name="public:base"}
+
+{block name="body"}
+<div class="row">
+    <div class="col-md-8">
+        <div class="page-header">
+            <!--查询分类信息-->
+            <h2>{$art.cate_id|getCateName}</h2>
+
+        </div>
+
+        <div>
+            <img src="/uploads/{$art.title_img}" class="img-rounded"style="margin-right: 40px;float:left;width: 100px;height: 85px;" alt="">
+            <div style="float: left;width: 80%;">
+                <h4><a href="{:url('detail',['id'=>$art.id])}">{$art.title}</a></h4>
+                <p>发布者:{$art.user_id|getUserName} &nbsp;&nbsp;&nbsp;&nbsp;发布时间：{$art.create_time|date='Y-m-d'}阅读量：{$art.pv}</p>
+                <div>{$art.content|getArtContent}</div>
+
+                <hr>
+                <button session_id="{$Think.session.user_id}" class="btn btn-default" type="button" id="fav" user_id="{$art.user_id}" article_id="{$art.id}">收藏</button>
+            </div>
+        </div>
+
+
+        <!--用户评论功能-->
+
+        <h4>发表评论</h4>
+
+        <form class="form-horizontal" id="comment">
+            <input type="hidden" name="article_id" value="{$art.id}">
+            <input type="hidden" name="user_id" value="{$art.user_id}">
+            <textarea name="content" cols="50" rows="5"></textarea>
+            <button type="button" class="btn btn-info" id="submit">提交</button>
+
+        </form>
+
+        <p class="text-success" id="res"></p>
+
+
+
+        <!--留言显示-->
+        {volist name="commentlist" id="comment"}
+
+
+        <div>
+            <p>{$comment.user_id|getUserName}&nbsp;{$comment.create_time}</p>
+
+            <div style="height: 50px">{$comment.content}</div>
+            <hr>
+        </div>
+
+        {/volist}
+    </div>
+
+
+    <!--提交评论-->
+
+    <script>
+        
+        $(function () {
+            $('#submit').on('click',function () {
+
+
+                $.ajax({
+
+                    type:'POST',
+                    url:"{:url('insertComment')}",
+                    data:$('#comment').serialize(),
+                    dataType:'json',
+                    success:function (data) {
+                       if(data.status == 1){
+                           $('#res').text(data.message)
+                       }else {
+                           $('#res').text(data.message)
+                       }
+                    }
+
+                })
+            })
+        })
+
+    </script>
+
+
+
+    
+
+
+    <script>
+
+        $(function () {
+
+            $('#fav').on('click',function () {
+
+                //获取当前用户的ID和文章的ID
+                var userId = $(this).attr('user_id');
+                var artId = $(this).attr('article_id');
+                var sessionid = $(this).attr('session_id');
+
+
+                $.ajax({
+
+                    type:'get',
+                    url:"{:url('index/fav')}",
+                    data:{
+                        userId:userId,
+                        artId:artId,
+                        sessionid:sessionid,
+                        time:new Date().getTime(),
+                    },
+                    dataType:'json',
+                    success:function (data) {
+                        switch (data.status) {
+
+                            case 1:
+                               $('#fav').attr('class','btn btn-success');
+                               $('#fav').text(data.message);
+
+                                break;
+                            case 0:
+                                $('#fav').attr('class','btn btn-default');
+                                $('#fav').text(data.message);
+                                break
+                            case -2:
+                                $('#fav').attr('class','btn btn-default');
+                                $('#fav').text(data.message);
+                                break
+                        }
+                    }
+
+                })
+            })
+
+
+        })
+
+
+
+
+    </script>
+
+
+
+    {/block}
