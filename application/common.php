@@ -12,6 +12,16 @@
 // 应用公共文件
 
 
+
+ function getIsAdminAttr($value){
+    //'is_admin' => string '管理员 ' (length=10)
+
+    $status = ['1'=>'管理员 ','0'=>'注册会员'];
+
+    return $status[$value];
+}
+
+
 //公共name名字
 if(!function_exists('getUserName')){
 
@@ -39,3 +49,7 @@ if(!function_exists('getCateName')){
         return \think\Db::table('zh_article_category')->where('id',$id)->value('name');//获取name字段的值
     }
 }
+
+
+
+

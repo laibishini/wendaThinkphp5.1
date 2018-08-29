@@ -311,7 +311,7 @@ class Index extends Base
     }
 
 
-    //
+    //留言
     public function insertComment(){
 
         if(Request::isAjax()){

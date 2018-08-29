@@ -10,7 +10,7 @@ namespace app\admin\controller;
 
 
 use app\admin\common\controller\Base;
-use app\admin\common\model\User as UserModel;
+use app\common\model\User as UserModel;
 use think\facade\Request;
 use think\Session;
 
@@ -82,12 +82,18 @@ class User extends Base
 
         //查询用户信息
 
-        $userlist = UserModel::where('id',$data['admin_id'] )->select();
+
+
 
         //如果是超级管理员获取全部的信息
        if($data['admin_level'] == 1){
            $userlist = UserModel::select();
+
+       }else{
+           $userlist = UserModel::where('id',$data['admin_id'] )->select();
        }
+
+
 
 
 
@@ -138,15 +144,19 @@ class User extends Base
         $user = Request::param();
 
 
+        ;
         //取出主键
 
         $id = $user['id'];
+
 
         //把用户加密进行保存查询用户密码和当前密码是否是一致的
 
         $password = UserModel::where('id',$id)->value('password');
 
-        unset($user['id']);
+
+
+
         //如果相等就说明你没改密码不不更新密码
 
         if($user['password'] === $password){
@@ -158,7 +168,9 @@ class User extends Base
 
         }
 
-        UserModel::where('id',$id)->data($user)->update();
+
+
+        UserModel::update($user);
 
         return $this->success('用户，密码更新成功');
     }
@@ -168,6 +180,8 @@ class User extends Base
     public function dodelete(){
 
         $id = Request::param('id');
+
+
 
        //执行删除操作
 

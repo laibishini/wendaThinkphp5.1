@@ -36,13 +36,6 @@ class User extends Model
         return $status[$value];
     }
 
-    public function getIsAdminAttr($value){
-        //'is_admin' => string '管理员 ' (length=10)
-
-        $status = ['1'=>'管理员 ','0'=>'注册会员'];
-
-        return $status[$value];
-    }
 
 
     //修改器当用户写入数据到数据表中实现自动转换比如MD5
